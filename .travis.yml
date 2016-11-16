@@ -8,7 +8,7 @@ notifications:
 
 branches:
   only:
-    - feature/feature-15-run-weather-forecast
+    - develop
 
 sudo: true
 
@@ -35,7 +35,7 @@ deploy:
     acl: public_read
     detect_encoding: true
     on:
-      branch: feature/feature-15-run-weather-forecast
+      branch: develop
 
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
@@ -47,4 +47,4 @@ deploy:
     deployment_group: TeamBash-Test
     region: us-west-2
     on:
-      branch: feature/feature-15-run-weather-forecast
+      branch: develop
