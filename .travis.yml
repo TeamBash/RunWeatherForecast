@@ -18,8 +18,10 @@ before_install:
 install:
 - npm install
 
-before_deploy:
+after_success:
   - cd ../../../
+
+before_deploy:
   - zip -r RunWeatherForecast_test.zip core/javascript/runWeatherForecast scripts appspec.yml Dockerfile || true
   - mkdir -p "teambash"
   - mv RunWeatherForecast_test.zip teambash/RunWeatherForecast_test.zip || true
@@ -37,6 +39,30 @@ deploy:
     on:
       branch: develop
 
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: sga-teambash-test2
+    local_dir: teambash
+    region: us-east-2
+    skip_cleanup: true
+    acl: public_read
+    detect_encoding: true
+    on:
+      branch: develop
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: sga-teambash-test3
+    local_dir: teambash
+    region: us-west-1
+    skip_cleanup: true
+    acl: public_read
+    detect_encoding: true
+    on:
+      branch: develop
+
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
     secret_access_key: $AWS_SECRET_KEY
@@ -46,5 +72,29 @@ deploy:
     application: TeamBash-Test
     deployment_group: TeamBash-Test
     region: us-west-2
+    on:
+      branch: develop
+
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: sga-teambash-test2
+    key: RunWeatherForecast_test.zip
+    bundle_type: zip
+    application: TeamBash-Test2
+    deployment_group: TeamBash-Test2
+    region: us-east-2
+    on:
+      branch: develop
+
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: sga-teambash-test3
+    key: RunWeatherForecast_test.zip
+    bundle_type: zip
+    application: TeamBash-Test3
+    deployment_group: TeamBash-Test3
+    region: us-west-1
     on:
       branch: develop
