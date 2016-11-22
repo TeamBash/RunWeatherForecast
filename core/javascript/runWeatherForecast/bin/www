@@ -100,9 +100,9 @@ function onListening() {
     if(response.statusCode !== 200){
       return console.log('Invalid Status Code Returned:', response.statusCode);
     }
-   // ip = body;
-   // ip = ip.replace(/\n$/, '');
-    ip = "127.0.0.1";
+    ip = body;
+    ip = ip.replace(/\n$/, '');
+    //ip = "127.0.0.1";
     console.log("Host IP is: " + ip);
     console.log(ip+":2181");
 
