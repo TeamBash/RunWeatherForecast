@@ -100,9 +100,9 @@ function onListening() {
     if(response.statusCode !== 200){
       return console.log('Invalid Status Code Returned:', response.statusCode);
     }
-    ip = body;
-    ip = ip.replace(/\n$/, '');
-    //ip = "127.0.0.1";
+//    ip = body;
+//    ip = ip.replace(/\n$/, '');
+    ip = "127.0.0.1";
     console.log("Host IP is: " + ip);
     console.log(ip+":2181");
 
@@ -123,12 +123,19 @@ function onListening() {
       "uriSpec": {"parts": [{"value": path,
         "variable": false}]}};
 
-    console.log(JSON.stringify(data));
-
     client.once('connected', function () {
       console.log('Connected to the server.');
 
-      client.create('/services/runWeatherForecast/'+sID,JSON.stringify(data), 1, function (error) {
+        client.create('/services/runWeatherForecast', 0, function (error) {
+        if(error){
+          console.log('Failed to create node: %s due to: %s',path, error);
+        }
+        else{
+          console.log('Node: %s is successfully created. Cheers!!', path)
+        }
+      });
+
+      client.create('/services/runWeatherForecast/'+sID, new Buffer(JSON.stringify(data)), 1, function (error) {
         if(error){
           console.log('Failed to create node: %s due to: %s',path, error);
         }
