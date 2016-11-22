@@ -9,10 +9,10 @@ var debug = require('debug')('runWeatherForecast:server');
 var http = require('http');
 var request = require('request');
 var ip = null;
-//var zk = require('node-zookeeper-client');
+var zk = require('node-zookeeper-client');
 var UUID = require('node-uuid');
 var moment  = require('moment');
-var ZooKeeper = require ("zookeeper");
+//var ZooKeeper = require ("zookeeper");
 /**
  * Get port from environment and store in Express.
  */
@@ -101,17 +101,15 @@ function onListening() {
       return console.log('Invalid Status Code Returned:', response.statusCode);
     }
     ip = body;
-    ip = "127.0.0.1";
+    ip = ip.slice(0, ip.length - 1);
+    //ip = "127.0.0.1";
     console.log("Host IP is: " + ip);
+    console.log(ip+":2181");
 
-//    var client = zk.createClient(ip+':2181');
-    var zk = new ZooKeeper({
-      connect: ip+":2181"
-      ,timeout: 200000
-      ,debug_level: ZooKeeper.ZOO_LOG_LEVEL_WARN
-      ,host_order_deterministic: false
-    });
+    var client = zk.createClient(ip+':2181');
+
     console.log("Client Created");
+
     var path = 'http://'+ip+":8200/runWeatherForecast";
     var sID = UUID.v4();
     var data = {"name": "runWeatherForecast",
@@ -125,36 +123,21 @@ function onListening() {
       "uriSpec": {"parts": [{"value": path,
         "variable": false}]}};
 
-    console.log(ip+":2181");
-//    console.log(data.jsonStringify(data));
+    console.log(JSON.stringify(data));
 
-//    client.once('connected', function () {
-//      console.log('Connected to the server.');
+    client.once('connected', function () {
+      console.log('Connected to the server.');
 
-//      client.create(path,data,CreateMode.EPHEMERAL.valueOf(), function (error) {
-//        if(error){
-//          console.log('Failed to create node: %s due to: %s',path, error);
- //       }
-      //  else{
-    //      console.log('Node: %s is sucessfully created. Cheers!!', path)
-  //      }
-//        client.close();
-//      });
-  //  });
-//    client.connect();
-    zk.connect(function (err) {
-      if(err) throw err;
-      console.log ("zk session established, id=%s", zk.client_id);
-      zk.a_create (path,JSON.stringify(data), ZooKeeper.ZOO_EPHEMERAL, function (rc, error, path)  {
-        if (rc != 0) {
-          console.log ("zk node create result: %d, error: '%s', path=%s", rc, error, path);
-        } else {
-          console.log ("created zk node %s", path);
-          process.nextTick(function () {
-            zk.close ();
-          });
+      client.create(path,JSON.stringify(data),CreateMode.EPHEMERAL, function (error) {
+        if(error){
+          console.log('Failed to create node: %s due to: %s',path, error);
         }
+        else{
+          console.log('Node: %s is successfully created. Cheers!!', path)
+        }
+        client.close();
       });
     });
+    client.connect();
   });
 }
