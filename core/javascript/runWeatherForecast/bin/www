@@ -100,9 +100,9 @@ function onListening() {
     if(response.statusCode !== 200){
       return console.log('Invalid Status Code Returned:', response.statusCode);
     }
-    ip = body;
-    ip = ip.slice(0, ip.length - 1);
-    //ip = "127.0.0.1";
+   // ip = body;
+   // ip = ip.replace(/\n$/, '');
+    ip = "127.0.0.1";
     console.log("Host IP is: " + ip);
     console.log(ip+":2181");
 
@@ -128,14 +128,14 @@ function onListening() {
     client.once('connected', function () {
       console.log('Connected to the server.');
 
-      client.create(path,JSON.stringify(data),CreateMode.EPHEMERAL, function (error) {
+      client.create('/services/runWeatherForecast',JSON.stringify(data), 1, function (error) {
         if(error){
           console.log('Failed to create node: %s due to: %s',path, error);
         }
         else{
           console.log('Node: %s is successfully created. Cheers!!', path)
         }
-        client.close();
+//        client.close();
       });
     });
     client.connect();
