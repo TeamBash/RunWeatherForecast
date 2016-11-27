@@ -33,4 +33,3 @@ fi
 cd "$dir/bin"
 ./zkServer.sh stop
 ./zkServer.sh start
-
