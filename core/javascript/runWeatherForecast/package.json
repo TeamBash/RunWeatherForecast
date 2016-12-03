@@ -12,7 +12,11 @@
     "express": "~4.13.4",
     "jade": "~1.11.0",
     "morgan": "~1.7.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "node-zookeeper-client": "~0.2.2",
+    "request": "~2.79.0",
+    "node-uuid": "~1.4.7",
+    "moment": "~2.17.0"
   },
   "devDependencies": {
     "mocha": "^3.0.2",
