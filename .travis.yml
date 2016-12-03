@@ -8,7 +8,7 @@ notifications:
 
 branches:
   only:
-    - develop
+    - master
 
 sudo: true
 
@@ -37,7 +37,7 @@ deploy:
     acl: public_read
     detect_encoding: true
     on:
-      branch: develop
+      branch: master
 
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
@@ -49,7 +49,7 @@ deploy:
     acl: public_read
     detect_encoding: true
     on:
-      branch: develop
+      branch: master
 
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
@@ -61,7 +61,7 @@ deploy:
     deployment_group: TeamBash-Test2
     region: us-east-2
     on:
-      branch: develop
+      branch: master
 
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
@@ -73,7 +73,7 @@ deploy:
     deployment_group: TeamBash-Test4
     region: us-east-2
     on:
-      branch: develop
+      branch: master
 
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
@@ -85,4 +85,4 @@ deploy:
     deployment_group: TeamBash-Test3
     region: us-west-1
     on:
-      branch: develop
+      branch: master
