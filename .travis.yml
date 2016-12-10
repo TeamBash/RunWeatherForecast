@@ -1,7 +1,4 @@
-language: node_js
-
-node_js:
-- "4.5.0"
+language: java
 
 notifications:
   slack: teambash-iu:Kumv5imwDciZcFQ2KvvUHIje
@@ -10,13 +7,14 @@ branches:
   only:
     - master
 
+jdk:
+  - oraclejdk8
+
 sudo: true
 
-before_install:
-- cd core/javascript/runWeatherForecast/
+install: true
 
-install:
-- npm install
+script: cd "core/javascript/runWeatherForecast/" && mvn clean install
 
 after_success:
   - cd ../../../
