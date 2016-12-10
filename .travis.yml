@@ -5,7 +5,7 @@ notifications:
 
 branches:
   only:
-    - master
+    - develop
 
 jdk:
   - oraclejdk8
@@ -14,13 +14,13 @@ sudo: true
 
 install: true
 
-script: cd "core/javascript/runWeatherForecast/" && mvn clean install
+script: cd "core/java/runWeatherForecast/" && mvn clean install
 
 after_success:
   - cd ../../../
 
 before_deploy:
-  - zip -r RunWeatherForecast_test.zip core/javascript/runWeatherForecast scripts appspec.yml Dockerfile || true
+  - zip -r RunWeatherForecast_test.zip core/java/runWeatherForecast scripts appspec.yml Dockerfile || true
   - mkdir -p "teambash"
   - mv RunWeatherForecast_test.zip teambash/RunWeatherForecast_test.zip || true
 
@@ -35,7 +35,7 @@ deploy:
     acl: public_read
     detect_encoding: true
     on:
-      branch: master
+      branch: develop
 
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
@@ -47,7 +47,7 @@ deploy:
     acl: public_read
     detect_encoding: true
     on:
-      branch: master
+      branch: develop
 
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
@@ -59,7 +59,7 @@ deploy:
     deployment_group: TeamBash-Test2
     region: us-east-2
     on:
-      branch: master
+      branch: develop
 
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
@@ -71,7 +71,7 @@ deploy:
     deployment_group: TeamBash-Test4
     region: us-east-2
     on:
-      branch: master
+      branch: develop
 
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
@@ -83,4 +83,4 @@ deploy:
     deployment_group: TeamBash-Test3
     region: us-west-1
     on:
-      branch: master
+      branch: develop
