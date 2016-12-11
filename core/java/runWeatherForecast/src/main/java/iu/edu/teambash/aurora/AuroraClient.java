@@ -2,6 +2,7 @@ package iu.edu.teambash.aurora;
 
 import iu.edu.teambash.aurora.bean.*;
 import iu.edu.teambash.aurora.client.AuroraThriftClient;
+import iu.edu.teambash.aurora.client.sdk.ScheduleStatus;
 import iu.edu.teambash.aurora.client.sdk.ScheduledTask;
 import iu.edu.teambash.aurora.utils.AuroraThriftClientUtil;
 import iu.edu.teambash.aurora.utils.Constants;
@@ -53,7 +54,16 @@ public class AuroraClient {
             JobDetailsResponseBean jobDetailsResponseBean = getJobDetails(jobName);
             ScheduledTask scheduledTask = jobDetailsResponseBean.getTasks().get(0);
             List<URI> urlList = new ArrayList<>();
-            urlList.add(new URI(scheduledTask.getAssignedTask().getSlaveHost() + scheduledTask.getAssignedTask().getTaskId()));
+            String hostAddr = null;
+            if(scheduledTask.getStatus() == ScheduleStatus.FINISHED){
+                String hostSlaveName = scheduledTask.getAssignedTask().getSlaveHost();
+                if(hostSlaveName.equals("sga-mesos-slave-1"))
+                    hostAddr = "http://52.53.179.0:1338/download/";
+                 else
+                    hostAddr = "http://54.215.219.32:1338/download/";
+                urlList.add(new URI(hostAddr + scheduledTask.getAssignedTask().getTaskId() + "/wrfoutput/Precip_total.gif"));
+                urlList.add(new URI(hostAddr + scheduledTask.getAssignedTask().getTaskId() + "/wrfoutput/Surface_multi.gif"));
+            }
             JobResultsBean jobResultsBean = new JobResultsBean(jobName, scheduledTask.getStatus(), urlList);
             jobResultsBeanList.add(jobResultsBean);
         }
