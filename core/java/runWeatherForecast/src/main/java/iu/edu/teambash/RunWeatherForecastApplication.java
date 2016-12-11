@@ -4,6 +4,7 @@ import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import iu.edu.teambash.resources.ForecastResource;
+import iu.edu.teambash.resources.JobDetailsResource;
 
 import javax.servlet.ServletException;
 
@@ -20,16 +21,14 @@ public class RunWeatherForecastApplication extends Application<RunWeatherForecas
 
     @Override
     public void initialize(final Bootstrap<RunWeatherForecastConfiguration> bootstrap) {
-        // TODO: application initialization
     }
 
     @Override
     public void run(final RunWeatherForecastConfiguration configuration,
                     final Environment environment) throws ServletException {
-        // TODO: implement application
         configuration.init();
-        final ForecastResource forecastResource = new ForecastResource();
-        environment.jersey().register(forecastResource);
+        environment.jersey().register(new ForecastResource());
+        environment.jersey().register(new JobDetailsResource());
     }
 
 }

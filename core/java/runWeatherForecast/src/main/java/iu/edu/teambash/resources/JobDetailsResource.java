@@ -1,27 +1,29 @@
 package iu.edu.teambash.resources;
 
 import iu.edu.teambash.aurora.AuroraClient;
-import iu.edu.teambash.aurora.bean.ResponseBean;
+import iu.edu.teambash.aurora.bean.JobResultsBean;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
- * Created by Raghuveer Raavi on 12/10/2016.
+ * Created by janakbhalla on 10/12/16.
  */
-@Path("/runWeatherForecast")
-public class ForecastResource {
+
+@Path("/getJobDetails")
+public class JobDetailsResource {
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseBean generateForecast(String jobName) {
-        ResponseBean response = null;
+    public List<JobResultsBean> getJobDetails(List<String> jobNames) {
         try {
-            response = AuroraClient.createJob(jobName);
+            return AuroraClient.getJobDetailsList(jobNames);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return response;
+        return null;
     }
 }
