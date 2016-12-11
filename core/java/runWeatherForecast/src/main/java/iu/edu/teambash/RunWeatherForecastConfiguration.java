@@ -25,8 +25,10 @@ public class RunWeatherForecastConfiguration extends Configuration {
             exception.printStackTrace();
         }
 
-        String microServiceURL = "http://" + ip + ":8200/runWeatherForecast";
         String msName = "runWeatherForecast";
+        String msName1 = "getJobDetails";
+        String microServiceURL = "http://" + ip + ":8200/" + msName;
+        String microServiceURL1 = "http://" + ip + ":8200/" + msName1;
         int port = 8200;
 
         CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(ip + ":2181", new RetryNTimes(5, 1000));
@@ -35,6 +37,9 @@ public class RunWeatherForecastConfiguration extends Configuration {
         try {
             ServiceInstance serviceInstance = ServiceInstance.builder().uriSpec(new UriSpec(microServiceURL)).address(ip).port(port).name(msName).build();
             ServiceDiscoveryBuilder.builder(Void.class).basePath("services").client(curatorFramework).thisInstance(serviceInstance).build().start();
+            ServiceInstance serviceInstance1 = ServiceInstance.builder().uriSpec(new UriSpec(microServiceURL1)).address(ip).port(port).name(msName1).build();
+            ServiceDiscoveryBuilder.builder(Void.class).basePath("services").client(curatorFramework).thisInstance(serviceInstance1).build().start();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
