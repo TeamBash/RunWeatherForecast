@@ -52,19 +52,23 @@ public class AuroraClient {
         List<JobResultsBean> jobResultsBeanList = new ArrayList<>();
         for (String jobName : jobNames) {
             JobDetailsResponseBean jobDetailsResponseBean = getJobDetails(jobName);
-            ScheduledTask scheduledTask = jobDetailsResponseBean.getTasks().get(0);
-            List<URI> urlList = new ArrayList<>();
-            String hostAddr = null;
-            if(scheduledTask.getStatus() == ScheduleStatus.FINISHED){
-                String hostSlaveName = scheduledTask.getAssignedTask().getSlaveHost();
-                if(hostSlaveName.equals("sga-mesos-slave-1"))
-                    hostAddr = "http://52.53.179.0:1338/download/";
-                 else
-                    hostAddr = "http://54.215.219.32:1338/download/";
-                urlList.add(new URI(hostAddr + scheduledTask.getAssignedTask().getTaskId() + "/wrfoutput/Precip_total.gif"));
-                urlList.add(new URI(hostAddr + scheduledTask.getAssignedTask().getTaskId() + "/wrfoutput/Surface_multi.gif"));
+            List<TaskResultsBean> taskResultsBeanList = new ArrayList<>();
+            for(ScheduledTask scheduledTask : jobDetailsResponseBean.getTasks()) {
+                List<URI> urlList = new ArrayList<>();
+                String hostAddr = null;
+                if (scheduledTask.getStatus() == ScheduleStatus.FINISHED) {
+                    String hostSlaveName = scheduledTask.getAssignedTask().getSlaveHost();
+                    if (hostSlaveName.equals("sga-mesos-slave-1"))
+                        hostAddr = "http://52.53.179.0:1338/download/";
+                    else
+                        hostAddr = "http://54.215.219.32:1338/download/";
+                    urlList.add(new URI(hostAddr + scheduledTask.getAssignedTask().getTaskId() + "/wrfoutput/Precip_total.gif"));
+                    urlList.add(new URI(hostAddr + scheduledTask.getAssignedTask().getTaskId() + "/wrfoutput/Surface_multi.gif"));
+                }
+                TaskResultsBean taskResultsBean = new TaskResultsBean(scheduledTask.getStatus(), urlList);
+                taskResultsBeanList.add(taskResultsBean);
             }
-            JobResultsBean jobResultsBean = new JobResultsBean(jobName, scheduledTask.getStatus(), urlList);
+            JobResultsBean jobResultsBean = new JobResultsBean(jobName, taskResultsBeanList);
             jobResultsBeanList.add(jobResultsBean);
         }
         return jobResultsBeanList;

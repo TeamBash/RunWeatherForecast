@@ -1,8 +1,5 @@
 package iu.edu.teambash.aurora.bean;
 
-import iu.edu.teambash.aurora.client.sdk.ScheduleStatus;
-
-import java.net.URI;
 import java.util.List;
 
 /**
@@ -12,15 +9,7 @@ public class JobResultsBean {
 
     private String jobName;
 
-    private ScheduleStatus scheduleStatus;
-
-    private List<URI> imageUrls;
-
-    public JobResultsBean(String jobName, ScheduleStatus scheduleStatus, List<URI> imageUrls) {
-        this.jobName = jobName;
-        this.scheduleStatus = scheduleStatus;
-        this.imageUrls = imageUrls;
-    }
+    private List<TaskResultsBean> taskResultsBeans;
 
     public String getJobName() {
         return jobName;
@@ -30,19 +19,16 @@ public class JobResultsBean {
         this.jobName = jobName;
     }
 
-    public ScheduleStatus getScheduleStatus() {
-        return scheduleStatus;
+    public JobResultsBean(String jobName, List<TaskResultsBean> taskResultsBeans) {
+        this.jobName = jobName;
+        this.taskResultsBeans = taskResultsBeans;
     }
 
-    public void setScheduleStatus(ScheduleStatus scheduleStatus) {
-        this.scheduleStatus = scheduleStatus;
+    public List<TaskResultsBean> getTaskResultsBeans() {
+        return taskResultsBeans;
     }
 
-    public List<URI> getImageUrls() {
-        return imageUrls;
-    }
-
-    public void setImageUrls(List<URI> imageUrls) {
-        this.imageUrls = imageUrls;
+    public void setTaskResultsBeans(List<TaskResultsBean> taskResultsBeans) {
+        this.taskResultsBeans = taskResultsBeans;
     }
 }
